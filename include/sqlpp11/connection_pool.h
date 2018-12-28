@@ -135,23 +135,9 @@ namespace sqlpp
       {
         // Exceeds default size, do nothign and let connection self destroy.
       }
-      else
+      else if (connection.get() && connection->is_valid())
       {
-        if (connection.get())
-        {
-          if (connection->is_valid())
-          {
-            free_connections.push(std::move(connection));
-          }
-          else
-          {
-            throw sqlpp::exception("Trying to free a connection with incompatible config.");
-          }
-        }
-        else
-        {
-          throw sqlpp::exception("Trying to free an empty connection.");
-        }
+        free_connections.push(std::move(connection));
       }
     }
 
@@ -183,7 +169,7 @@ namespace sqlpp
 
       try
       {
-        auto c = std::unique_ptr<Connection>(new Connection(*(config.get())));
+        auto c = std::unique_ptr<Connection>(new Connection(config));
         return pool_connection<Connection_config, Reconnect_policy, Connection>(c, this);
       }
       catch (const sqlpp::exception& e)

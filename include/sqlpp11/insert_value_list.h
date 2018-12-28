@@ -690,7 +690,7 @@ namespace sqlpp
   }
 
   template <typename Database, typename... Assignments>
-  auto dynamic_insert_set(Assignments... assignments)
+  constexpr auto dynamic_insert_set(const Database & /*unused*/, Assignments... assignments)
       -> decltype(statement_t<Database, no_insert_value_list_t>().dynamic_set(assignments...))
   {
     return statement_t<Database, no_insert_value_list_t>().dynamic_set(assignments...);

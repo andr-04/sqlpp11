@@ -72,6 +72,11 @@ namespace sqlpp
       return _impl.get();
     }
 
+    Connection& operator*()
+    {
+      return *_impl;
+    }
+
     pool_connection(const pool_connection&) = delete;
     pool_connection(pool_connection&& other) : _impl(std::move(other._impl)), origin(other.origin)
     {
